@@ -1494,6 +1494,11 @@ public class TiC
 	 * @module.api
 	 */
 	public static final String PROPERTY_FILE = "file";
+	
+	/**
+	 * @module.api
+	 */
+	public static final String PROPERTY_FILTER_TEXT = "filterText";
 
 	/**
 	 * @module.api

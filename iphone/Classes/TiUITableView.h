@@ -64,6 +64,7 @@
   NSString *searchString;
   NSMutableArray *searchResultIndexes;
   BOOL searchActivated;
+  BOOL keepSectionsWithNoRowsInSearch;
   BOOL filterAnchored;
   BOOL filterCaseInsensitive;
   BOOL allowsSelectionSet;
