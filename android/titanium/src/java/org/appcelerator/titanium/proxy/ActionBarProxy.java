@@ -16,6 +16,8 @@ import org.appcelerator.titanium.util.TiFileHelper;
 import org.appcelerator.titanium.util.TiUrl;
 
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.Color;
 import android.os.Message;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +31,7 @@ public class ActionBarProxy extends KrollProxy
 	private static final int MSG_FIRST_ID = KrollProxy.MSG_LAST_ID + 1;
 	private static final int MSG_DISPLAY_HOME_AS_UP = MSG_FIRST_ID + 100;
 	private static final int MSG_SET_BACKGROUND_IMAGE = MSG_FIRST_ID + 101;
+	private static final int MSG_SET_BACKGROUND_COLOR = MSG_FIRST_ID + 112;
 	private static final int MSG_SET_TITLE = MSG_FIRST_ID + 102;
 	private static final int MSG_SHOW = MSG_FIRST_ID + 103;
 	private static final int MSG_HIDE = MSG_FIRST_ID + 104;
@@ -42,6 +45,7 @@ public class ActionBarProxy extends KrollProxy
 	private static final String SHOW_HOME_AS_UP = "showHomeAsUp";
 	private static final String HOME_BUTTON_ENABLED = "homeButtonEnabled";
 	private static final String BACKGROUND_IMAGE = "backgroundImage";
+	private static final String BACKGROUND_COLOR = "backgroundColor";
 	private static final String TITLE = "title";
 	private static final String LOGO = "logo";
 	private static final String ICON = "icon";
@@ -107,6 +111,18 @@ public class ActionBarProxy extends KrollProxy
 		} else {
 			Message message = getMainHandler().obtainMessage(MSG_SET_BACKGROUND_IMAGE, url);
 			message.getData().putString(BACKGROUND_IMAGE, url);
+			message.sendToTarget();
+		}
+	}
+	
+	@Kroll.method @Kroll.setProperty
+	public void setBackgroundColor(String colorCode)
+	{
+		if (TiApplication.isUIThread()) {
+			handleSetBackgroundColor(colorCode);
+		} else {
+			Message message = getMainHandler().obtainMessage(MSG_SET_BACKGROUND_COLOR, colorCode);
+			message.getData().putString(BACKGROUND_COLOR, colorCode);
 			message.sendToTarget();
 		}
 	}
@@ -304,6 +320,20 @@ public class ActionBarProxy extends KrollProxy
 			actionBar.setBackgroundDrawable(backgroundImage);
 		}
 	}
+	
+	private void handleSetBackgroundColor(String colorCode)
+	{
+		if (actionBar == null) {
+			Log.w(TAG, "ActionBar is not enabled");
+			return;
+		}
+
+		if (colorCode != null) {
+			actionBar.setDisplayShowTitleEnabled(!showTitleEnabled);
+			actionBar.setDisplayShowTitleEnabled(showTitleEnabled);
+			actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(colorCode)));
+		}
+	}
 
 	private void handlesetDisplayHomeAsUp(boolean showHomeAsUp)
 	{
@@ -360,6 +390,9 @@ public class ActionBarProxy extends KrollProxy
 				return true;
 			case MSG_SET_BACKGROUND_IMAGE:
 				handleSetBackgroundImage(msg.getData().getString(BACKGROUND_IMAGE));
+				return true;
+			case MSG_SET_BACKGROUND_COLOR:
+				handleSetBackgroundColor(msg.getData().getString(BACKGROUND_COLOR));
 				return true;
 			case MSG_SET_TITLE:
 				handleSetTitle(msg.getData().getString(TITLE));
