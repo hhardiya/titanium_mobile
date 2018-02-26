@@ -20,7 +20,6 @@ import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 
-
 /**
  * EditText derived class used by Titanium's "Ti.UI.TextField" and "Ti.UI.TextArea" types.
  * <p>
@@ -52,6 +51,7 @@ public class TiUIEditText extends TextInputEditText implements NestedScrollingCh
 	/** Stores the last received nested touch event in screen coordinates along the y-axis. */
 	private int lastRawTouchY;
 
+<<<<<<< HEAD
 	/** Min pixel distance a touch move must cover before it's considered to be a drag/scroll event. */
 	private int minDragStartDistance;
 
@@ -59,6 +59,8 @@ public class TiUIEditText extends TextInputEditText implements NestedScrollingCh
 	private boolean isDragging;
 
 
+=======
+>>>>>>> a2b0d9f9b280c87e626d0c9f3426aaa5f6cc8924
 	/** Creates a new EditText view. */
 	public TiUIEditText(Context context)
 	{
@@ -111,7 +113,8 @@ public class TiUIEditText extends TextInputEditText implements NestedScrollingCh
 	public boolean onKeyPreIme(int keyCode, KeyEvent event)
 	{
 		// TIMOB-23757: https://code.google.com/p/android/issues/detail?id=182191
-		if (Build.VERSION.SDK_INT < 24 && (getGravity() & Gravity.LEFT) != Gravity.LEFT && keyCode == KeyEvent.KEYCODE_BACK) {
+		if (Build.VERSION.SDK_INT < 24 && (getGravity() & Gravity.LEFT) != Gravity.LEFT
+			&& keyCode == KeyEvent.KEYCODE_BACK) {
 			ViewGroup view = (ViewGroup) getParent();
 			view.setFocusableInTouchMode(true);
 			view.requestFocus();
@@ -160,6 +163,7 @@ public class TiUIEditText extends TextInputEditText implements NestedScrollingCh
 					} else {
 						this.scrollAxisDirection = ViewCompat.SCROLL_AXIS_HORIZONTAL;
 					}
+<<<<<<< HEAD
 					this.startRawTouchX = (int)event.getRawX();
 					this.startRawTouchY = (int)event.getRawY();
 					this.lastRawTouchX = this.startRawTouchX;
@@ -168,6 +172,11 @@ public class TiUIEditText extends TextInputEditText implements NestedScrollingCh
 					if (!wasStarted) {
 						this.scrollAxisDirection = ViewCompat.SCROLL_AXIS_NONE;
 					}
+=======
+					this.lastRawTouchX = (int) event.getRawX();
+					this.lastRawTouchY = (int) event.getRawY();
+					startNestedScroll(this.scrollAxisDirection);
+>>>>>>> a2b0d9f9b280c87e626d0c9f3426aaa5f6cc8924
 				}
 
 				// Let the base class handle the touch "down" event.
@@ -180,6 +189,7 @@ public class TiUIEditText extends TextInputEditText implements NestedScrollingCh
 					// Determine if the touch point has moved far enough to be considered a drag event.
 					// Note: Touch down/up events within this min distance are considered taps/clicks.
 					boolean isVertical = (this.scrollAxisDirection == ViewCompat.SCROLL_AXIS_VERTICAL);
+<<<<<<< HEAD
 					if (!this.isDragging) {
 						int dragDistance;
 						if (isVertical) {
@@ -190,6 +200,19 @@ public class TiUIEditText extends TextInputEditText implements NestedScrollingCh
 						if (Math.abs(dragDistance) > this.minDragStartDistance) {
 							this.isDragging = true;
 						}
+=======
+					int deltaX = this.lastRawTouchX - (int) event.getRawX();
+					int deltaY = this.lastRawTouchY - (int) event.getRawY();
+					int deltaValue = isVertical ? deltaY : deltaX;
+					boolean isScrollEnabled;
+					boolean canScrollFurther;
+					if (isVertical) {
+						isScrollEnabled = canScrollVertically(1) || canScrollVertically(-1);
+						canScrollFurther = canScrollVertically(deltaValue);
+					} else {
+						isScrollEnabled = canScrollHorizontally(1) || canScrollHorizontally(-1);
+						canScrollFurther = canScrollHorizontally(deltaValue);
+>>>>>>> a2b0d9f9b280c87e626d0c9f3426aaa5f6cc8924
 					}
 
 					// Check if we need to scroll the parent, if currently dragging.
@@ -227,6 +250,7 @@ public class TiUIEditText extends TextInputEditText implements NestedScrollingCh
 
 					// Store the last received touch point in screen coordinates.
 					// This is needed to calculate nested scroll distances.
+<<<<<<< HEAD
 					this.lastRawTouchX = (int)event.getRawX();
 					this.lastRawTouchY = (int)event.getRawY();
 				}
@@ -234,6 +258,13 @@ public class TiUIEditText extends TextInputEditText implements NestedScrollingCh
 				// Let the EditText handle the event if the parent wasn't scrolled via the above.
 				if (!wasHandled) {
 					wasHandled = super.onTouchEvent(event);
+=======
+					this.lastRawTouchX = (int) event.getRawX();
+					this.lastRawTouchY = (int) event.getRawY();
+				} else {
+					// Nested scrolling is disabled. Let EditText do default touch handling.
+					result = super.onTouchEvent(event);
+>>>>>>> a2b0d9f9b280c87e626d0c9f3426aaa5f6cc8924
 				}
 				break;
 			}
@@ -297,19 +328,19 @@ public class TiUIEditText extends TextInputEditText implements NestedScrollingCh
 	}
 
 	@Override
-	public boolean dispatchNestedScroll(
-		int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed, int[] offsetInWindow)
+	public boolean dispatchNestedScroll(int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed,
+										int[] offsetInWindow)
 	{
-		return this.nestedScrollingHelper.dispatchNestedScroll(
-				dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed, offsetInWindow);
+		return this.nestedScrollingHelper.dispatchNestedScroll(dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed,
+															   offsetInWindow);
 	}
 
 	@Override
-	public boolean dispatchNestedScroll(
-		int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed, int[] offsetInWindow, int type)
+	public boolean dispatchNestedScroll(int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed,
+										int[] offsetInWindow, int type)
 	{
-		return this.nestedScrollingHelper.dispatchNestedScroll(
-				dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed, offsetInWindow, type);
+		return this.nestedScrollingHelper.dispatchNestedScroll(dxConsumed, dyConsumed, dxUnconsumed, dyUnconsumed,
+															   offsetInWindow, type);
 	}
 
 	@Override
