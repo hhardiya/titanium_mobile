@@ -29,7 +29,7 @@ public class ActionBarProxy extends KrollProxy
 	private static final int MSG_FIRST_ID = KrollProxy.MSG_LAST_ID + 1;
 	private static final int MSG_DISPLAY_HOME_AS_UP = MSG_FIRST_ID + 100;
 	private static final int MSG_SET_BACKGROUND_IMAGE = MSG_FIRST_ID + 101;
-	private static final int MSG_SET_BACKGROUND_COLOR = MSG_FIRST_ID + 112;
+	private static final int MSG_SET_BACKGROUND_COLOR = MSG_FIRST_ID + 113;
 	private static final int MSG_SET_TITLE = MSG_FIRST_ID + 102;
 	private static final int MSG_SHOW = MSG_FIRST_ID + 103;
 	private static final int MSG_HIDE = MSG_FIRST_ID + 104;
