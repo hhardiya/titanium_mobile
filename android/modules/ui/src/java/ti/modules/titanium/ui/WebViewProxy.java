@@ -137,6 +137,27 @@ public class WebViewProxy extends ViewProxy
 			}
 		}
 	}
+	
+	@Kroll.method @Kroll.setProperty
+	public void setHtmlWithData(String html, String baseUrl, String mimeType, boolean callNativeOnly)
+	{
+		setProperty(TiC.PROPERTY_HTML, html);
+
+		// If the web view has not been created yet, don't set html here. It will be set in processProperties() when the
+		// view is created.
+		TiUIView v = peekView();
+		if (v != null) {
+			if (TiApplication.isUIThread()) {
+				if(callNativeOnly) {
+					((TiUIWebView) v).setHtmlWithData(html, baseUrl, mimeType);
+				} else {					
+					((TiUIWebView) v).setHtmlInternal(html, baseUrl, mimeType);
+				}
+			} else {
+				getMainHandler().sendEmptyMessage(MSG_SET_HTML);
+			}
+		}
+	}
 
 	@Override
 	public boolean handleMessage(Message msg)
