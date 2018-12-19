@@ -739,7 +739,7 @@ public class TiUIWebView extends TiUIView
 	 * @param baseUrl				url to associate with the data being loaded
 	 * @param mimeType			mime type of the data being loaded
 	 */
-	private void setHtmlInternal(String html, String baseUrl, String mimeType)
+	public void setHtmlInternal(String html, String baseUrl, String mimeType)
 	{
 		// iOS parity: for whatever reason, when html is set directly, the iOS implementation
 		// explicitly sets the native webview's setScalesPageToFit to NO if the
@@ -787,6 +787,11 @@ public class TiUIWebView extends TiUIView
 			}
 		}
 
+		webView.loadDataWithBaseURL(baseUrl, html, mimeType, "utf-8", baseUrl);
+	}
+	
+	public void setHtmlWithData(String html, String baseUrl, String mimeType) {
+		WebView webView = getWebView();
 		webView.loadDataWithBaseURL(baseUrl, html, mimeType, "utf-8", baseUrl);
 	}
 
