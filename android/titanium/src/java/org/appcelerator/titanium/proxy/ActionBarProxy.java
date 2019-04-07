@@ -40,7 +40,7 @@ public class ActionBarProxy extends KrollProxy
 	private static final int MSG_SET_SUBTITLE = MSG_FIRST_ID + 109;
 	private static final int MSG_SET_DISPLAY_SHOW_HOME = MSG_FIRST_ID + 110;
 	private static final int MSG_SET_DISPLAY_SHOW_TITLE = MSG_FIRST_ID + 111;
-	private static final int MSG_SET_CUSTOM_VIEW = MSG_FIRST_ID + 112;
+	private static final int MSG_SET_CUSTOM_VIEW = MSG_FIRST_ID + 1000;
 	private static final String SHOW_HOME_AS_UP = "showHomeAsUp";
 	private static final String HOME_BUTTON_ENABLED = "homeButtonEnabled";
 	private static final String BACKGROUND_IMAGE = "backgroundImage";
